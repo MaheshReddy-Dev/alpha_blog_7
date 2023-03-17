@@ -1,0 +1,28 @@
+<div class="container">
+  <% @articles.each do |a| %>
+    <div class="row justify-content-md-center">
+      <div class="col-6 mt-4">
+        <div class="card text-center shadow mb-5 bg-white rounded">
+          <div class="card-header font-italic">
+            <%if a.user%>
+            By <%= link_to a.user.username, user_path(a.user)%>
+            <%end%>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><%=a.title%></h5>
+            <p class="card-text"><%=truncate(a.description, length: 50)%></p>
+            <%= link_to 'view', article_path(a), class:"btn btn-outline-primary"%>
+            <% if logged_in? && a.user == current_user %>
+              <%= link_to 'edit', edit_article_path(a), class:"btn btn-outline-warning"%>
+              <%= link_to 'delete', article_path(a), class:"btn btn-outline-danger", data: { turbo_method: :delete, turbo_confirm: "Alert!: You are deleting article: #{a.title}, please confirm"}%>
+            <% end %>  
+          </div>
+          <div class="card-footer text-muted">
+            <small>created <%=time_ago_in_words(a.created_at)%> ago,
+            updated <%=time_ago_in_words(a.updated_at)%> ago.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%end%>
+</div>
